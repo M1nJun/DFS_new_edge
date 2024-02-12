@@ -1,46 +1,55 @@
-// C++ program to print DFS traversal from
-// a given vertex in a given graph
 #include <iostream>
 #include <list>
 #include <map>
 using namespace std;
 
-// Graph class represents a directed graph
-// using adjacency list representation
-class Graph {
-public:
-	map<int, bool> visited;
-	map<int, list<int> > adj;
-    map<pair<int, int>, int> weight;
-    // this is for keeping track of path from u to v
-    list<int> record;
-
-	// Function to add an edge to graph
-	void addEdge(int u, int v, int w);
-
-	// DFS traversal of the vertices
-	// reachable from v
-	void DFS(int u);
+// This struct is for the purpose of saving the data of the new edge
+template<typename T>
+struct Edge {
+    T u;
+    T v;
+    int w;
 };
 
-void Graph::addEdge(int u, int v, int w)
+// Graph class represents a directed graph
+// using adjacency list representation
+template<typename T>
+class Graph {
+public:
+    map<T, bool> visited;
+    map<T, list<T> > adj;
+    map<pair<T, T>, int> weight;
+    // this is for keeping track of path from u to v when performing the DFS from u
+    list<T> record;
+
+    // Function to add an edge to graph
+    void addEdge(T u, T v, int w);
+
+    // DFS traversal of the vertices
+    // reachable from v
+    void DFS(T u);
+};
+
+template<typename T>
+void Graph<T>::addEdge(T u, T v, int w)
 {
-	// Add w to v’s list.
-	adj[u].push_back(v);
+    // Add w to v’s list.
+    adj[u].push_back(v);
     weight[make_pair(u, v)] = w;
 }
 
-void Graph::DFS(int u)
+template<typename T>
+void Graph<T>::DFS(T u)
 {
-	// Mark the current node as visited and
-	// print it
-	visited[u] = true;
+    // Mark the current node as visited and
+    // print it
+    visited[u] = true;
     record.push_back(u);
-	cout << u << " ";
+    cout << u << " ";
 
-	// Recur for all the vertices adjacent
-	// to this vertex
-	list<int>::iterator i;
+    // Recur for all the vertices adjacent
+    // to this vertex
+    list<int>::iterator i;
 	for (i = adj[u].begin(); i != adj[u].end(); ++i)
 		if (!visited[*i])
 			DFS(*i);
@@ -49,21 +58,22 @@ void Graph::DFS(int u)
 // Driver code
 int main()
 {
-	// Create a graph given in the above diagram
-	Graph g;
-	g.addEdge(0, 1);
-	g.addEdge(0, 2);
-	g.addEdge(1, 2);
-	g.addEdge(2, 0);
-	g.addEdge(2, 3);
+    // Create a graph given in the above diagram
+    Graph<int> g;
+    g.addEdge('A', 'C', 3);
+    g.addEdge('C', 'B', 4);
+    g.addEdge('C', 'D', 6);
+    g.addEdge('D', 'E', 2);
 
-	cout << "Following is Depth First Traversal"
-			" (starting from vertex 2) \n";
+    Edge<string> newEdge;
+    std::cout << "Enter the start and end vertex, and the weight of the new edge each separated by a space: ";
+    cin >> newEdge.u >> newEdge.v >> newEdge.w;
 
-	// Function call
-	g.DFS(2);
+    cout << "Following is Depth First Traversal"
+            " (starting from vertex C) \n";
 
-	return 0;
+    // Function call
+    g.DFS('C');
+
+    return 0;
 }
-
-// improved by Vishnudev C
