@@ -78,6 +78,7 @@ graph<T>::graph()
         //says to give template arguments to this edge() function here. But why should I give it a template argument when it constructs an edge?
         u->edges.push_back(edge<T>(u, v, w));
         v->edges.push_back(edge<T>(v, u, w));
+        //to set up prevs for everything
     }
     in.close();
 }
@@ -111,6 +112,7 @@ edge<T> graph<T>::DFS_Visit(vertex<T> *u, vertex<T> *v){
     winner.weight = 0;
     for (auto itr = u->edges.begin();itr != u->edges.end();itr++) {
         if (itr->v->visited == false){
+            itr->v->prev = u;
             // check if you went to the same edge you came from
             if (itr->v == u->prev){
                 continue;
